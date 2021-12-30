@@ -8,10 +8,26 @@ service Userauth {
 	rpc Call(Request) returns (Response) {}
 	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
 	rpc PingPong(stream Ping) returns (stream Pong) {}
+
+	rpc UserLogin(LoginRequest) returns (LoginResponse){}
 }
 
 message Message {
 	string say = 1;
+}
+
+message LoginRequest {
+	string username = 1;
+	string password = 2;
+}
+
+message LoginResponse {
+	string AccessToken  = 1;
+	string RefreshToken  = 2;
+	string AccessUuid  = 3;
+	string RefreshUuid  = 4;
+	int64 AtExpires  = 5;
+	int64 RtExpires  = 6;
 }
 
 message Request {
