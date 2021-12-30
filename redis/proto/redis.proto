@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package redis;
+
+option go_package = "./proto;redis";
+
+service Redis {
+	rpc Set(SetRequest) returns (SetResponse) {}
+	rpc Get(GetRequest) returns (GetResponse) {}
+	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+}
+
+message Message {
+	string say = 1;
+}
+
+message SetRequest {
+	string key = 1;
+	string value = 2;
+}
+
+message SetResponse {
+	string msg = 1;
+}
+
+message GetRequest {
+	string key = 1;
+}
+
+message GetResponse {
+	string value = 1;
+}
+
+message DeleteRequest {
+	string key = 1;
+}
+
+message DeleteResponse {
+	string msg = 1;
+}
