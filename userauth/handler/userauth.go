@@ -7,8 +7,9 @@ import (
 
 	token "userauth/auth_token"
 	userauth "userauth/proto"
-	// redis "/redis/proto"
-	// "github.com/micro/micro/v3/service/client"
+
+	redis "github.com/Megadarshan/pinnacle-micro/redis/proto"
+	"github.com/micro/micro/v3/service/client"
 )
 
 type Userauth struct{}
@@ -28,11 +29,11 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 		println("Token not generated")
 	}
 
-	// // create a new service client
-	// cache := redis.NewRedisService("redis", client.DefaultClient)
-	// // call the endpoint Redis.Set
-	// crsp, err := cache.Set(context.Background(), &redis.SetRequest{Key: tkn.AccessUuid, Value: tkn.AccessToken})
-	// log.Info(crsp)
+	// create a new service client
+	cache := redis.NewRedisService("redis", client.DefaultClient)
+	// call the endpoint Redis.Set
+	crsp, err := cache.Set(context.Background(), &redis.SetRequest{Key: tkn.AccessUuid, Value: tkn.AccessToken})
+	log.Info(crsp)
 
 	// rsp.Token, err = json.Marshal(token)
 	// if err != nil {
