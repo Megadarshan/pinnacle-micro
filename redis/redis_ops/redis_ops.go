@@ -1,6 +1,7 @@
 package redis_ops
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -64,8 +65,6 @@ func Set(key string, val string, expiration int64) error {
 	at := time.Unix(expiration, 0)
 	now := time.Now()
 	expSeconds := int(at.Sub(now).Seconds())
-	// print(expSeconds)
-	// _, err := conn.Set(key, val, at.Sub(now))
 
 	_, err := conn.Do("SET", key, val, "EX", expSeconds)
 
@@ -73,8 +72,6 @@ func Set(key string, val string, expiration int64) error {
 		log.Printf("ERROR: fail set key %s, val %s, error %s", key, val, err.Error())
 		return err
 	}
-
-	// conn.Do("EXPIRE", key, expSeconds)
 
 	return nil
 }
@@ -84,13 +81,38 @@ func Get(key string) (string, error) {
 	conn := pool.Get()
 	defer conn.Close()
 
-	s, err := redis.String(conn.Do("GET", key))
-	if err != nil {
-		log.Printf("ERROR: fail get key %s, error %s", key, err.Error())
-		return "", err
-	}
+	value, err := redis.String(conn.Do("GET", key))
 
-	return s, nil
+	if err == redis.ErrNil {
+		log.Printf("%s : Alert! this Key does not exist\n", key)
+		return ("Alert! this Key does not exist\n"), err
+	} else if err != nil {
+		log.Printf("ERROR: fail get key %s, error %s", key, err.Error())
+		return ("An Unknown error encountered"), err
+	} else {
+		return value, err
+	}
+}
+
+func Remove(key string) error {
+	// get conn and put back when exit from method
+	conn := pool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("DEL", key)
+	return err
+}
+
+func Exists(key string) (bool, error) {
+
+	conn := pool.Get()
+	defer conn.Close()
+
+	ok, err := redis.Bool(conn.Do("EXISTS", key))
+	if err != nil {
+		return ok, fmt.Errorf("error checking if key %s exists: %v", key, err)
+	}
+	return ok, err
 }
 
 func Sadd(key string, val string) error {

@@ -27,13 +27,36 @@ func (e *Redis) Set(ctx context.Context, req *redis.SetRequest, rsp *redis.SetRe
 // Call is a single request handler called via client.Call or the generated client code
 func (e *Redis) Get(ctx context.Context, req *redis.GetRequest, rsp *redis.GetResponse) error {
 	log.Info("Received Redis.Get request")
-	rsp.Value = "Hello " + req.Key
+	resp, err := redis_ops.Get(req.Key)
+
+	if err != nil {
+		log.Info("Something went wrong")
+	}
+	rsp.Value = resp
 	return nil
 }
 
 // Call is a single request handler called via client.Call or the generated client code
 func (e *Redis) Delete(ctx context.Context, req *redis.DeleteRequest, rsp *redis.DeleteResponse) error {
 	log.Info("Received Redis.Delete request")
-	rsp.Msg = "Hello " + req.Key
+	err := redis_ops.Remove(req.Key)
+	if err != nil {
+		log.Info("Value Not Removed")
+		rsp.Msg = "Value Not Removed"
+		return err
+	}
+	rsp.Msg = "Value Removed"
+	return nil
+}
+
+func (e *Redis) Exists(ctx context.Context, req *redis.ExistsRequest, rsp *redis.ExistsResponse) error {
+	log.Info("Received Redis.Exists request")
+	exists, err := redis_ops.Exists(req.Key)
+	if err != nil {
+		log.Info(err.Error())
+		rsp.Exists = exists
+		return err
+	}
+	rsp.Exists = exists
 	return nil
 }

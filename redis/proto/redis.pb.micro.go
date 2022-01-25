@@ -45,6 +45,7 @@ type RedisService interface {
 	Set(ctx context.Context, in *SetRequest, opts ...client.CallOption) (*SetResponse, error)
 	Get(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*GetResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error)
+	Exists(ctx context.Context, in *ExistsRequest, opts ...client.CallOption) (*ExistsResponse, error)
 }
 
 type redisService struct {
@@ -89,12 +90,23 @@ func (c *redisService) Delete(ctx context.Context, in *DeleteRequest, opts ...cl
 	return out, nil
 }
 
+func (c *redisService) Exists(ctx context.Context, in *ExistsRequest, opts ...client.CallOption) (*ExistsResponse, error) {
+	req := c.c.NewRequest(c.name, "Redis.Exists", in)
+	out := new(ExistsResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Redis service
 
 type RedisHandler interface {
 	Set(context.Context, *SetRequest, *SetResponse) error
 	Get(context.Context, *GetRequest, *GetResponse) error
 	Delete(context.Context, *DeleteRequest, *DeleteResponse) error
+	Exists(context.Context, *ExistsRequest, *ExistsResponse) error
 }
 
 func RegisterRedisHandler(s server.Server, hdlr RedisHandler, opts ...server.HandlerOption) error {
@@ -102,6 +114,7 @@ func RegisterRedisHandler(s server.Server, hdlr RedisHandler, opts ...server.Han
 		Set(ctx context.Context, in *SetRequest, out *SetResponse) error
 		Get(ctx context.Context, in *GetRequest, out *GetResponse) error
 		Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error
+		Exists(ctx context.Context, in *ExistsRequest, out *ExistsResponse) error
 	}
 	type Redis struct {
 		redis
@@ -124,4 +137,8 @@ func (h *redisHandler) Get(ctx context.Context, in *GetRequest, out *GetResponse
 
 func (h *redisHandler) Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error {
 	return h.RedisHandler.Delete(ctx, in, out)
+}
+
+func (h *redisHandler) Exists(ctx context.Context, in *ExistsRequest, out *ExistsResponse) error {
+	return h.RedisHandler.Exists(ctx, in, out)
 }

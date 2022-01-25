@@ -10,6 +10,7 @@ service Redis {
 	rpc Set(SetRequest) returns (SetResponse) {}
 	rpc Get(GetRequest) returns (GetResponse) {}
 	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+	rpc Exists(ExistsRequest) returns (ExistsResponse) {}
 }
 
 message Message {
@@ -41,4 +42,12 @@ message DeleteRequest {
 
 message DeleteResponse {
 	string msg = 1;
+}
+
+message ExistsRequest {
+	string key = 1;
+}
+
+message ExistsResponse {
+	bool exists = 1;
 }
