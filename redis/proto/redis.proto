@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package redis;
 
+// import "google/protobuf/timestamp.proto";
+
 option go_package = "./proto;redis";
 
 service Redis {
@@ -17,6 +19,8 @@ message Message {
 message SetRequest {
 	string key = 1;
 	string value = 2;
+	int64 life = 3;
+
 }
 
 message SetResponse {

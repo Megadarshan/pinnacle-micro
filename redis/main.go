@@ -1,14 +1,17 @@
 package main
 
 import (
-	"redis/handler"
-	pb "redis/proto"
+	"github.com/Megadarshan/pinnacle-micro/redis/handler"
+	pb "github.com/Megadarshan/pinnacle-micro/redis/proto"
+	"github.com/Megadarshan/pinnacle-micro/redis/redis_ops"
 
 	"github.com/micro/micro/v3/service"
 	"github.com/micro/micro/v3/service/logger"
 )
 
 func main() {
+
+	redis_ops.InitRedis()
 	// Create service
 	srv := service.New(
 		service.Name("redis"),

@@ -3,9 +3,9 @@ package redis_ops
 import (
 	"log"
 	"os"
-	"strings"
+	"time"
 
-	//redis "github.com/go-redis/redis/v8"
+	// redis "github.com/go-redis/redis/v8"
 	redis "github.com/gomodule/redigo/redis"
 )
 
@@ -40,12 +40,12 @@ func initStore() {
 	conn := pool.Get()
 	defer conn.Close()
 
-	macs := []string{"00000C  Cisco", "00000D  FIBRONICS", "00000E  Fujitsu",
-		"00000F  Next", "000010  Hughes"}
-	for _, mac := range macs {
-		pair := strings.Split(mac, "  ")
-		Set(pair[0], pair[1])
-	}
+	// macs := []string{"00000C  Cisco", "00000D  FIBRONICS", "00000E  Fujitsu",
+	// 	"00000F  Next", "000010  Hughes"}
+	// for _, mac := range macs {
+	// 	pair := strings.Split(mac, "  ")
+	// 	Set(pair[0], pair[1])
+	// }
 }
 
 func Ping(conn redis.Conn) {
@@ -56,16 +56,25 @@ func Ping(conn redis.Conn) {
 	}
 }
 
-func Set(key string, val string) error {
+func Set(key string, val string, expiration int64) error {
 	// get conn and put back when exit from method
 	conn := pool.Get()
 	defer conn.Close()
 
-	_, err := conn.Do("SET", key, val)
+	at := time.Unix(expiration, 0)
+	now := time.Now()
+	expSeconds := int(at.Sub(now).Seconds())
+	// print(expSeconds)
+	// _, err := conn.Set(key, val, at.Sub(now))
+
+	_, err := conn.Do("SET", key, val, "EX", expSeconds)
+
 	if err != nil {
 		log.Printf("ERROR: fail set key %s, val %s, error %s", key, val, err.Error())
 		return err
 	}
+
+	// conn.Do("EXPIRE", key, expSeconds)
 
 	return nil
 }
