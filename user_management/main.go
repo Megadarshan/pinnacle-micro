@@ -1,25 +1,22 @@
 package main
 
 import (
-	"github.com/Megadarshan/pinnacle-micro/userauth/database"
-	"github.com/Megadarshan/pinnacle-micro/userauth/handler"
-	pb "github.com/Megadarshan/pinnacle-micro/userauth/proto"
+	"user_management/handler"
+	pb "user_management/proto"
 
 	"github.com/micro/micro/v3/service"
 	"github.com/micro/micro/v3/service/logger"
 )
 
 func main() {
-
-	database.InitDb()
 	// Create service
 	srv := service.New(
-		service.Name("userauth"),
+		service.Name("user_management"),
 		service.Version("latest"),
 	)
 
 	// Register handler
-	pb.RegisterUserauthHandler(srv.Server(), new(handler.Userauth))
+	pb.RegisterUser_managementHandler(srv.Server(), new(handler.User_management))
 
 	// Run service
 	if err := srv.Run(); err != nil {

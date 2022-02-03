@@ -36,7 +36,7 @@ func CreateToken(userid uint64, username string) (*TokenDetails, error) {
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
 	td.AccessUuid = uuid.NewV4().String()
 
-	td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
+	td.RtExpires = time.Now().Add(time.Hour * 24).Unix()
 	td.RefreshUuid = uuid.NewV4().String()
 
 	var err error

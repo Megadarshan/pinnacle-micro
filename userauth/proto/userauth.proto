@@ -22,12 +22,13 @@ message LoginRequest {
 }
 
 message LoginResponse {
-	string AccessToken  = 1;
-	string RefreshToken  = 2;
-	string AccessUuid  = 3;
-	string RefreshUuid  = 4;
-	int64 AtExpires  = 5;
-	int64 RtExpires  = 6;
+	bool LoginStatus = 1;
+	string AccessToken  = 2;
+	string RefreshToken  = 3;
+	string AccessUuid  = 4;
+	string RefreshUuid  = 5;
+	int64 AtExpires  = 6;
+	int64 RtExpires  = 7;
 }
 
 message Request {
