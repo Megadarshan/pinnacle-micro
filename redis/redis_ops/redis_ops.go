@@ -27,7 +27,7 @@ func initPool() {
 		MaxActive: 12000,
 		Dial: func() (redis.Conn, error) {
 			// You can use redis.DialOption: redis.DialDatabase, redis.DialPassword within redis.Dial()
-			conn, err := redis.Dial("tcp", "localhost:6379")
+			conn, err := redis.Dial("tcp", "localhost:6379", redis.DialDatabase(1))
 			if err != nil {
 				log.Printf("ERROR: fail init redis: %s", err.Error())
 				os.Exit(1)
