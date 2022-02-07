@@ -12,6 +12,7 @@ import (
 
 	redis "github.com/Megadarshan/pinnacle-micro/redis/proto"
 	"github.com/micro/micro/v3/service/client"
+	"google.golang.org/grpc/metadata"
 )
 
 type Userauth struct {
@@ -40,11 +41,35 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 	log.Info("Received User_auth.Call request")
 	// log.Infof("%s", e.httpRequest.Header)
 	var auth bool
-	var er interface{}
+	var userId uint64
 
+	var er interface{}
+	//**********************************
+	var values []string
+	var headtoken, username string
+
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		values = md.Get("authorization")
+		log.Info("Header => ", md)
+	}
+
+	if len(values) > 0 {
+		headtoken = values[0]
+	}
+	log.Info("Header -> ", headtoken)
+
+	// // Loop over header names
+	// for name, values := range md {
+	// 	// Loop over all values for the name.
+	// 	for _, value := range values {
+	// 		log.Info("Header - (", name, " : ", value, ")")
+	// 	}
+	// }
+	//**********************************
 	// var err error
-	var err = database.DB.QueryRow("SELECT (password = crypt($1 , password)) as auth from users where username = $2 ",
-		req.Password, req.Username).Scan(&auth)
+	var err = database.DB.QueryRow("SELECT id, username, (password = crypt($1 , password)) as auth from users where username = $2 ",
+		req.Password, req.Username).Scan(&userId, &username, &auth)
 	if err != nil {
 		auth = false
 	}
@@ -52,7 +77,7 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 	rsp.LoginStatus = auth
 
 	if auth {
-		tkn, err := token.CreateToken(234, req.Username)
+		tkn, err := token.CreateToken(userId, username)
 		if err != nil {
 			println("Token not generated")
 		}
@@ -60,17 +85,26 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 		// create a new service client
 		cache := redis.NewRedisService("redis", client.DefaultClient)
 		// call the endpoint Redis.Set
-		crsp, err := cache.Set(context.Background(), &redis.SetRequest{
+		setCacheAT, err := cache.Set(context.Background(), &redis.SetRequest{
 			Key:   tkn.AccessUuid,
 			Value: tkn.AccessToken,
 			Life:  tkn.AtExpires,
 		})
-		log.Info(crsp)
-
+		log.Info(setCacheAT)
+		if err != nil {
+			println("Access Token not cached")
+			log.Info("Access Token not cached")
+		}
+		setCacheRT, err := cache.Set(context.Background(), &redis.SetRequest{
+			Key:   tkn.RefreshUuid,
+			Value: tkn.RefreshToken,
+			Life:  tkn.RtExpires,
+		})
+		log.Info(setCacheRT)
 		// rsp.Token, err = json.Marshal(token)
 		if err != nil {
-			println("Token not cached")
-			log.Info("Token not cached")
+			println("Refresh Token not cached")
+			log.Info("Refresh Token not cached")
 		}
 		// rsp.Token = "Username:" + req.Username + " | Password:" + req.Password
 		rsp.AccessToken = tkn.AccessToken
@@ -84,6 +118,33 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 		return rr
 	}
 
+	return nil
+}
+
+// Call is a single request handler called via client.Call or the generated client code
+func (e *Userauth) UserLogout(ctx context.Context, req *userauth.LogoutRequest, rsp *userauth.LogoutResponse) error {
+	// var er interface{}
+	log.Info("Received Userauth.UserLogout request")
+	// create a new service client
+	// err := token.TokenValidate(ctx)
+	// if err != nil {
+	// 	log.Info("Error : ", err.Error())
+	// 	return errors.Unauthorized("userauth.UserLogout", "Unauthorized to perform Logout.. ("+err.Error()+")", er)
+	// }
+
+	cache := redis.NewRedisService("redis", client.DefaultClient)
+	for i, uuid := range req.Uuids {
+		log.Info(i, uuid)
+		delResp, err := cache.Delete(context.Background(), &redis.DeleteRequest{Key: uuid})
+		if err != nil {
+			log.Info("Token not found")
+		}
+		log.Info(delResp)
+
+	}
+
+	log.Info("Successfully Logged Out...")
+	rsp.Msg = "Successfully Logged Out... "
 	return nil
 }
 

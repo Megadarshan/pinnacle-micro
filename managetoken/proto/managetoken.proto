@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package managetoken;
+
+// import "google/protobuf/any.proto";
+
+option go_package = "./proto;managetoken";
+
+service Managetoken {
+    rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {}
+    // rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {}
+    // rpc DeleteToken(DeleteTokenRequest) returns (DeleteTokenResponse) {}
+}
+
+message CreateTokenRequest {
+    int64 user_id = 1;
+	string username = 2;
+	// google.protobuf.Any claims = 1;
+}
+
+message CreateTokenResponse {
+	string AccessToken  = 1;
+	string RefreshToken  = 2;
+	string AccessUuid  = 3;
+	string RefreshUuid  = 4;
+	int64 AtExpires  = 5;
+	int64 RtExpires  = 6;
+}
+
+message ValidateTokenRequest {
+    int64 count = 1;
+}
+
+message ValidateTokenResponse {
+    int64 count = 1;
+}
+
+message DeleteTokenRequest {
+    int64 stroke = 1;
+}
+
+message DeleteTokenResponse {
+    int64 stroke = 1;
+}

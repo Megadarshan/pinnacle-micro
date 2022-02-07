@@ -46,6 +46,7 @@ type UserauthService interface {
 	Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (Userauth_StreamService, error)
 	PingPong(ctx context.Context, opts ...client.CallOption) (Userauth_PingPongService, error)
 	UserLogin(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error)
+	UserLogout(ctx context.Context, in *LogoutRequest, opts ...client.CallOption) (*LogoutResponse, error)
 }
 
 type userauthService struct {
@@ -180,6 +181,16 @@ func (c *userauthService) UserLogin(ctx context.Context, in *LoginRequest, opts 
 	return out, nil
 }
 
+func (c *userauthService) UserLogout(ctx context.Context, in *LogoutRequest, opts ...client.CallOption) (*LogoutResponse, error) {
+	req := c.c.NewRequest(c.name, "Userauth.UserLogout", in)
+	out := new(LogoutResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Userauth service
 
 type UserauthHandler interface {
@@ -187,6 +198,7 @@ type UserauthHandler interface {
 	Stream(context.Context, *StreamingRequest, Userauth_StreamStream) error
 	PingPong(context.Context, Userauth_PingPongStream) error
 	UserLogin(context.Context, *LoginRequest, *LoginResponse) error
+	UserLogout(context.Context, *LogoutRequest, *LogoutResponse) error
 }
 
 func RegisterUserauthHandler(s server.Server, hdlr UserauthHandler, opts ...server.HandlerOption) error {
@@ -195,6 +207,7 @@ func RegisterUserauthHandler(s server.Server, hdlr UserauthHandler, opts ...serv
 		Stream(ctx context.Context, stream server.Stream) error
 		PingPong(ctx context.Context, stream server.Stream) error
 		UserLogin(ctx context.Context, in *LoginRequest, out *LoginResponse) error
+		UserLogout(ctx context.Context, in *LogoutRequest, out *LogoutResponse) error
 	}
 	type Userauth struct {
 		userauth
@@ -298,4 +311,8 @@ func (x *userauthPingPongStream) Recv() (*Ping, error) {
 
 func (h *userauthHandler) UserLogin(ctx context.Context, in *LoginRequest, out *LoginResponse) error {
 	return h.UserauthHandler.UserLogin(ctx, in, out)
+}
+
+func (h *userauthHandler) UserLogout(ctx context.Context, in *LogoutRequest, out *LogoutResponse) error {
+	return h.UserauthHandler.UserLogout(ctx, in, out)
 }

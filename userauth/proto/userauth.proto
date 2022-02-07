@@ -10,6 +10,7 @@ service Userauth {
 	rpc PingPong(stream Ping) returns (stream Pong) {}
 
 	rpc UserLogin(LoginRequest) returns (LoginResponse){}
+	rpc UserLogout(LogoutRequest) returns (LogoutResponse){}
 }
 
 message Message {
@@ -29,6 +30,14 @@ message LoginResponse {
 	string RefreshUuid  = 5;
 	int64 AtExpires  = 6;
 	int64 RtExpires  = 7;
+}
+
+message LogoutRequest {
+	repeated string uuids = 1;
+}
+
+message LogoutResponse {
+	string msg = 1;
 }
 
 message Request {

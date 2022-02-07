@@ -1,15 +1,12 @@
-module github.com/Megadarshan/pinnacle-micro/userauth
+module github.com/Megadarshan/pinnacle-micro/managetoken
 
 go 1.17
 
 require (
-	github.com/Megadarshan/pinnacle-micro/redis v0.0.0-20220125095844-50ca0be6efd7
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang/protobuf v1.5.2
-	github.com/lib/pq v1.10.4
 	github.com/micro/micro/v3 v3.9.0
 	github.com/twinj/uuid v1.0.0
-	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
 )
 
@@ -46,10 +43,11 @@ require (
 	go.etcd.io/bbolt v1.3.5 // indirect
 	go.uber.org/atomic v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
-	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 // indirect
-	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
-	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb // indirect
+	golang.org/x/sys v0.0.0-20210112080510-489259a85091 // indirect
+	golang.org/x/text v0.3.3 // indirect
 	google.golang.org/genproto v0.0.0-20200806141610-86f49bd18e98 // indirect
+	google.golang.org/grpc v1.40.0 // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
