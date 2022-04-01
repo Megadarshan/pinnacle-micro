@@ -3,7 +3,7 @@ module github.com/Megadarshan/pinnacle-micro/userauth
 go 1.17
 
 require (
-	github.com/Megadarshan/pinnacle-micro/managetoken v0.0.0-20220401103509-d11bc5d60de4
+	github.com/Megadarshan/pinnacle-micro/managetoken v0.0.0-20220401120903-aef4cab05cc4
 	github.com/Megadarshan/pinnacle-micro/redis v0.0.0-20220207122653-cd419d600d1d
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang/protobuf v1.5.2

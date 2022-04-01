@@ -39,6 +39,7 @@ func (e *Managetoken) CreateToken(ctx context.Context, req *managetoken.CreateTo
 	atClaims["exp"] = AtExpires
 	atClaims["user_id"] = req.UserId
 	atClaims["username"] = req.Username
+	atClaims["struct"] = req.Claims
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	AccessToken, err := at.SignedString([]byte(AccessTokenSign))
 	if err != nil {
@@ -51,6 +52,7 @@ func (e *Managetoken) CreateToken(ctx context.Context, req *managetoken.CreateTo
 	rtClaims["user_id"] = req.UserId
 	rtClaims["username"] = req.Username
 	rtClaims["exp"] = RtExpires
+	rtClaims["struct"] = req.Claims
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
 	RefreshToken, err := rt.SignedString([]byte(RefreshTokenSign))
 	if err != nil {

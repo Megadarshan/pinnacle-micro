@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 
 	errors "github.com/micro/micro/v3/service/errors"
 	log "github.com/micro/micro/v3/service/logger"
@@ -13,6 +14,8 @@ import (
 	redis "github.com/Megadarshan/pinnacle-micro/redis/proto"
 	"github.com/micro/micro/v3/service/client"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/structpb"
 )
 
 type Userauth struct {
@@ -42,7 +45,6 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 	// log.Infof("%s", e.httpRequest.Header)
 	var auth bool
 	var userId uint64
-
 	var er interface{}
 	//**********************************
 	var values []string
@@ -78,10 +80,19 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 
 	if auth {
 
-		token, err := TokenService().CreateToken(context.Background(), &token.CreateTokenRequest{
-			UserId: int64(userId),
-			// Username: username,
+		m := map[string]interface{}{
+			"foo": "bar",
+			"baz": 123,
+		}
+		b, err := json.Marshal(m)
+		claims := &structpb.Struct{}
+		err = protojson.Unmarshal(b, claims)
 
+		token, err := TokenService().CreateToken(context.Background(), &token.CreateTokenRequest{
+			UserId:       int64(userId),
+			Username:     username,
+			StaySignedIn: req.StaySignedIn,
+			Claims:       claims,
 		})
 		if err != nil {
 			return errors.Unauthorized("userauth.UserLogin", "Token Not Generated", er)
