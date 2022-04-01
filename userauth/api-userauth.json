@@ -1,0 +1,464 @@
+{
+  "components": {
+    "requestBodies": {
+      "UserauthCallRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Request"
+            }
+          }
+        },
+        "description": "UserauthCallRequest"
+      },
+      "UserauthPingPongRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Ping"
+            }
+          }
+        },
+        "description": "UserauthPingPongRequest"
+      },
+      "UserauthStreamRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/StreamingRequest"
+            }
+          }
+        },
+        "description": "UserauthStreamRequest"
+      },
+      "UserauthUserLoginRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginRequest"
+            }
+          }
+        },
+        "description": "UserauthUserLoginRequest"
+      },
+      "UserauthUserLogoutRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LogoutRequest"
+            }
+          }
+        },
+        "description": "UserauthUserLogoutRequest"
+      }
+    },
+    "responses": {
+      "MicroAPIError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "Code": {
+                  "description": "Error code",
+                  "example": 500,
+                  "type": "number"
+                },
+                "Detail": {
+                  "description": "Error detail",
+                  "example": "service not found",
+                  "type": "string"
+                },
+                "Id": {
+                  "description": "Error ID",
+                  "type": "string"
+                },
+                "Status": {
+                  "description": "Error status message",
+                  "example": "Internal Server Error",
+                  "type": "string"
+                }
+              },
+              "title": "MicroAPIError",
+              "type": "object"
+            }
+          }
+        },
+        "description": "Error from the Micro API"
+      },
+      "UserauthCallResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Response"
+            }
+          }
+        },
+        "description": "UserauthCallResponse"
+      },
+      "UserauthPingPongResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Pong"
+            }
+          }
+        },
+        "description": "UserauthPingPongResponse"
+      },
+      "UserauthStreamResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/StreamingResponse"
+            }
+          }
+        },
+        "description": "UserauthStreamResponse"
+      },
+      "UserauthUserLoginResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            }
+          }
+        },
+        "description": "UserauthUserLoginResponse"
+      },
+      "UserauthUserLogoutResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LogoutResponse"
+            }
+          }
+        },
+        "description": "UserauthUserLogoutResponse"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "title": "LoginRequest",
+        "type": "object"
+      },
+      "LoginResponse": {
+        "properties": {
+          "AccessToken": {
+            "type": "string"
+          },
+          "AccessUuid": {
+            "type": "string"
+          },
+          "AtExpires": {
+            "format": "int64",
+            "type": "number"
+          },
+          "LoginStatus": {
+            "type": "boolean"
+          },
+          "RefreshToken": {
+            "type": "string"
+          },
+          "RefreshUuid": {
+            "type": "string"
+          },
+          "RtExpires": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "LoginResponse",
+        "type": "object"
+      },
+      "LogoutRequest": {
+        "properties": {
+          "uuids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "title": "LogoutRequest",
+        "type": "object"
+      },
+      "LogoutResponse": {
+        "properties": {
+          "msg": {
+            "type": "string"
+          }
+        },
+        "title": "LogoutResponse",
+        "type": "object"
+      },
+      "Message": {
+        "properties": {
+          "say": {
+            "type": "string"
+          }
+        },
+        "title": "Message",
+        "type": "object"
+      },
+      "Ping": {
+        "properties": {
+          "stroke": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "Ping",
+        "type": "object"
+      },
+      "Pong": {
+        "properties": {
+          "stroke": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "Pong",
+        "type": "object"
+      },
+      "Request": {
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "title": "Request",
+        "type": "object"
+      },
+      "Response": {
+        "properties": {
+          "msg": {
+            "type": "string"
+          }
+        },
+        "title": "Response",
+        "type": "object"
+      },
+      "StreamingRequest": {
+        "properties": {
+          "count": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "StreamingRequest",
+        "type": "object"
+      },
+      "StreamingResponse": {
+        "properties": {
+          "count": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "StreamingResponse",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "MicroAPIToken": {
+        "bearerFormat": "JWT",
+        "description": "Micro API token",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Generated by protoc-gen-openapi",
+    "title": "Userauth",
+    "version": "1",
+    "x-logo": {
+      "altText": "Micro logo",
+      "backgroundColor": "#FFFFFF",
+      "url": "https://micro.mu/images/brand.png"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/userauth/Userauth/Call": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserauthCallRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserauthCallResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Userauth.Call(Request)"
+      }
+    },
+    "/userauth/Userauth/PingPong": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserauthPingPongRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserauthPingPongResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          },
+          "stream": {
+            "$ref": "#/components/responses/UserauthPingPongResponse"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Userauth.PingPong(Ping)"
+      }
+    },
+    "/userauth/Userauth/Stream": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserauthStreamRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserauthStreamResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          },
+          "stream": {
+            "$ref": "#/components/responses/UserauthStreamResponse"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Userauth.Stream(StreamingRequest)"
+      }
+    },
+    "/userauth/Userauth/UserLogin": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserauthUserLoginRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserauthUserLoginResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Userauth.UserLogin(LoginRequest)"
+      }
+    },
+    "/userauth/Userauth/UserLogout": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserauthUserLogoutRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserauthUserLogoutResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Userauth.UserLogout(LogoutRequest)"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Micro dev environment"
+    }
+  ]
+}

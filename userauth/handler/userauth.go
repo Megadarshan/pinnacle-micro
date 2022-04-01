@@ -79,8 +79,9 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 	if auth {
 
 		token, err := TokenService().CreateToken(context.Background(), &token.CreateTokenRequest{
-			UserId:   int64(userId),
-			Username: username,
+			UserId: int64(userId),
+			// Username: username,
+
 		})
 		if err != nil {
 			return errors.Unauthorized("userauth.UserLogin", "Token Not Generated", er)
@@ -94,24 +95,24 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 			Life:  token.AtExpires,
 		})
 		// call the endpoint Redis.Set
-
-		log.Info(setCacheAT)
 		if err != nil {
-			println("Access Token not cached")
-			log.Info("Access Token not cached")
+			log.Info("Access Token ERROR: " + err.Error())
+			return err
 		}
+		log.Info(setCacheAT)
+
 		setCacheRT, err := RedisService().Set(context.Background(), &redis.SetRequest{
 			Key:   token.RefreshUuid,
 			Value: token.RefreshToken,
 			Life:  token.RtExpires,
 		})
-		log.Info(setCacheRT)
 		// rsp.Token, err = json.Marshal(token)
 		if err != nil {
-			println("Refresh Token not cached")
-			log.Info("Refresh Token not cached")
+			log.Info("Refresh Token ERROR: " + err.Error())
+			return err
 		}
-		// rsp.Token = "Username:" + req.Username + " | Password:" + req.Password
+		log.Info(setCacheRT)
+
 		rsp.AccessToken = token.AccessToken
 		rsp.RefreshToken = token.RefreshToken
 		rsp.AccessUuid = token.AccessUuid
@@ -119,10 +120,8 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 		rsp.AtExpires = token.AtExpires
 		rsp.RtExpires = token.RtExpires
 	} else {
-		rr := errors.Unauthorized("userauth.UserLogin", "Username and Password combination not found..", er)
-		return rr
+		return errors.Unauthorized("userauth.UserLogin", "%s", "Username and Password combination not found")
 	}
-
 	return nil
 }
 
@@ -130,12 +129,6 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 func (e *Userauth) UserLogout(ctx context.Context, req *userauth.LogoutRequest, rsp *userauth.LogoutResponse) error {
 	// var er interface{}
 	log.Info("Received Userauth.UserLogout request")
-	// create a new service client
-	// err := token.TokenValidate(ctx)
-	// if err != nil {
-	// 	log.Info("Error : ", err.Error())
-	// 	return errors.Unauthorized("userauth.UserLogout", "Unauthorized to perform Logout.. ("+err.Error()+")", er)
-	// }
 
 	cache := redis.NewRedisService("redis", client.DefaultClient)
 	for i, uuid := range req.Uuids {

@@ -27,6 +27,10 @@ func (e *Managetoken) CreateToken(ctx context.Context, req *managetoken.CreateTo
 	RtExpires := time.Now().Add(time.Minute * 30).Unix()
 	RefreshUuid := uuid.NewV4().String()
 
+	if req.StaySignedIn {
+		RtExpires = time.Now().AddDate(0, 0, 30).Unix()
+	}
+
 	var err error
 
 	atClaims := jwt.MapClaims{}
@@ -38,7 +42,7 @@ func (e *Managetoken) CreateToken(ctx context.Context, req *managetoken.CreateTo
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	AccessToken, err := at.SignedString([]byte(AccessTokenSign))
 	if err != nil {
-		return errors.BadRequest("Managetoken.CreateToken", "Access token not generated"+err.Error(), dummyInterface)
+		return errors.InternalServerError("Managetoken.CreateToken", "Access token not generated"+err.Error(), dummyInterface)
 	}
 
 	//Creating Refresh Token
@@ -50,7 +54,7 @@ func (e *Managetoken) CreateToken(ctx context.Context, req *managetoken.CreateTo
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
 	RefreshToken, err := rt.SignedString([]byte(RefreshTokenSign))
 	if err != nil {
-		return errors.BadRequest("Managetoken.CreateToken", "Refresh token not generated"+err.Error(), dummyInterface)
+		return errors.InternalServerError("Managetoken.CreateToken", "Refresh token not generated"+err.Error(), dummyInterface)
 	}
 
 	rsp.AccessUuid = AccessUuid

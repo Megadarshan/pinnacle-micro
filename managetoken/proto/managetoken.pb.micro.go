@@ -6,6 +6,7 @@ package managetoken
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	_ "google.golang.org/protobuf/types/known/anypb"
 	math "math"
 )
 
