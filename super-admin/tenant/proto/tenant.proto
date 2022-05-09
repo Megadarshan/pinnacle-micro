@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package tenant;
+
+option go_package = "./proto;tenant";
+ 
+service Tenant {
+    rpc GetTenantStatus(TenantStatusRequest) returns (TenantStatusResponse) {}
+    rpc GetTenantType(TenantTypeRequest) returns (TenantTypeResponse) {}
+    rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse) {}
+//  rpc GetTenant(GetTenantRequest) returns (GetTenantResponse) {}
+    rpc ListTenants(ListTenantsRequest) returns (ListTenantsResponse) {}
+    rpc UpdateTenant(UpdateTenantRequest) returns (UpdateTenantResponse) {}
+    rpc DeleteTenant(DeleteTenantRequest) returns (DeleteTenantResponse) {}
+}
+
+message TenantStatusRequest{}
+message TenantStatus{
+    string code = 1;
+    bool status = 2;
+    string descr = 3;
+}
+message TenantStatusResponse{
+    repeated TenantStatus statusList = 1;
+}
+message TenantTypeRequest{}
+message TenantType{
+    string code = 1;
+    bool status = 2;
+    string descr = 3;
+}
+message TenantTypeResponse{
+    repeated TenantType typeList = 1;
+}
+message CreateTenantRequest { 
+ string name = 1; 
+ string logo = 2; 
+ string status = 3; 
+ string startDate = 4; 
+ string endDate = 5; 
+ string type = 6; 
+}  
+message CreateTenantResponse { 
+    string response = 1;
+} 
+message GetTenantRequest { string say = 1; }  
+message GetTenantResponse { string say = 1; } 
+message ListTenantsRequest {}  
+message TenantDetail { 
+    string id = 1;    
+    string name = 2;
+    string logo = 3;
+    string status = 4; 
+    string startDate = 5;
+    string endDate = 6;
+    string tenantType = 7;
+    string createdOn = 8;
+    string lastModDate = 9;} 
+message ListTenantsResponse{
+    repeated TenantDetail tenantList = 1;
+}
+message UpdateTenantRequest { string say = 1; }  
+message UpdateTenantResponse { string say = 1; } 
+message DeleteTenantRequest { int32 tenantId = 1; }  
+message DeleteTenantResponse { string respnse = 1; } 

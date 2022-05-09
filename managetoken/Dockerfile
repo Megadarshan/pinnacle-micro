@@ -6,7 +6,7 @@ COPY go.sum .
 RUN go mod download
 COPY . .
 # RUN go build
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o shippy-service-consignment
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o managetoken
 # CMD [ "./redis" ]
 
 # image.

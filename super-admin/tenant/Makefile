@@ -9,15 +9,15 @@ init:
 
 .PHONY: api
 api:
-	protoc --openapi_out=. --proto_path=. proto/user_management.proto
+	protoc --openapi_out=. --proto_path=. proto/tenant.proto
 
 .PHONY: proto
 proto:
-	protoc --proto_path=. --micro_out=. --go_out=:. proto/user_management.proto
+	protoc --proto_path=. --micro_out=. --go_out=:. proto/tenant.proto
 	
 .PHONY: build
 build:
-	go build -o user_management *.go
+	go build -o tenant *.go
 
 .PHONY: test
 test:
@@ -25,4 +25,4 @@ test:
 
 .PHONY: docker
 docker:
-	docker build . -t user_management:latest
+	docker build . -t tenant:latest

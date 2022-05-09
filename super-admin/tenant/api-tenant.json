@@ -1,0 +1,622 @@
+{
+  "components": {
+    "requestBodies": {
+      "TenantCreateTenantRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateTenantRequest"
+            }
+          }
+        },
+        "description": "TenantCreateTenantRequest"
+      },
+      "TenantDeleteTenantRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteTenantRequest"
+            }
+          }
+        },
+        "description": "TenantDeleteTenantRequest"
+      },
+      "TenantGetTenantStatusRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TenantStatusRequest"
+            }
+          }
+        },
+        "description": "TenantGetTenantStatusRequest"
+      },
+      "TenantGetTenantTypeRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TenantTypeRequest"
+            }
+          }
+        },
+        "description": "TenantGetTenantTypeRequest"
+      },
+      "TenantListTenantsRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ListTenantsRequest"
+            }
+          }
+        },
+        "description": "TenantListTenantsRequest"
+      },
+      "TenantUpdateTenantRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateTenantRequest"
+            }
+          }
+        },
+        "description": "TenantUpdateTenantRequest"
+      }
+    },
+    "responses": {
+      "MicroAPIError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "Code": {
+                  "description": "Error code",
+                  "example": 500,
+                  "type": "number"
+                },
+                "Detail": {
+                  "description": "Error detail",
+                  "example": "service not found",
+                  "type": "string"
+                },
+                "Id": {
+                  "description": "Error ID",
+                  "type": "string"
+                },
+                "Status": {
+                  "description": "Error status message",
+                  "example": "Internal Server Error",
+                  "type": "string"
+                }
+              },
+              "title": "MicroAPIError",
+              "type": "object"
+            }
+          }
+        },
+        "description": "Error from the Micro API"
+      },
+      "TenantCreateTenantResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateTenantResponse"
+            }
+          }
+        },
+        "description": "TenantCreateTenantResponse"
+      },
+      "TenantDeleteTenantResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteTenantResponse"
+            }
+          }
+        },
+        "description": "TenantDeleteTenantResponse"
+      },
+      "TenantGetTenantStatusResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TenantStatusResponse"
+            }
+          }
+        },
+        "description": "TenantGetTenantStatusResponse"
+      },
+      "TenantGetTenantTypeResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TenantTypeResponse"
+            }
+          }
+        },
+        "description": "TenantGetTenantTypeResponse"
+      },
+      "TenantListTenantsResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ListTenantsResponse"
+            }
+          }
+        },
+        "description": "TenantListTenantsResponse"
+      },
+      "TenantUpdateTenantResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateTenantResponse"
+            }
+          }
+        },
+        "description": "TenantUpdateTenantResponse"
+      }
+    },
+    "schemas": {
+      "CreateTenantRequest": {
+        "properties": {
+          "endDate": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "title": "CreateTenantRequest",
+        "type": "object"
+      },
+      "CreateTenantResponse": {
+        "properties": {
+          "response": {
+            "type": "string"
+          }
+        },
+        "title": "CreateTenantResponse",
+        "type": "object"
+      },
+      "DeleteTenantRequest": {
+        "properties": {
+          "tenantId": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "DeleteTenantRequest",
+        "type": "object"
+      },
+      "DeleteTenantResponse": {
+        "properties": {
+          "respnse": {
+            "type": "string"
+          }
+        },
+        "title": "DeleteTenantResponse",
+        "type": "object"
+      },
+      "GetTenantRequest": {
+        "properties": {
+          "say": {
+            "type": "string"
+          }
+        },
+        "title": "GetTenantRequest",
+        "type": "object"
+      },
+      "GetTenantResponse": {
+        "properties": {
+          "say": {
+            "type": "string"
+          }
+        },
+        "title": "GetTenantResponse",
+        "type": "object"
+      },
+      "ListTenantsRequest": {
+        "title": "ListTenantsRequest",
+        "type": "object"
+      },
+      "ListTenantsResponse": {
+        "properties": {
+          "tenantList": {
+            "properties": {
+              "createdOn": {
+                "type": "string"
+              },
+              "endDate": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "lastModDate": {
+                "type": "string"
+              },
+              "logo": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "startDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "tenantType": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "title": "ListTenantsResponse",
+        "type": "object"
+      },
+      "TenantDetail": {
+        "properties": {
+          "createdOn": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "lastModDate": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "tenantType": {
+            "type": "string"
+          }
+        },
+        "title": "TenantDetail",
+        "type": "object"
+      },
+      "TenantStatus": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "descr": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "title": "TenantStatus",
+        "type": "object"
+      },
+      "TenantStatusRequest": {
+        "title": "TenantStatusRequest",
+        "type": "object"
+      },
+      "TenantStatusResponse": {
+        "properties": {
+          "statusList": {
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "descr": {
+                "type": "string"
+              },
+              "status": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "title": "TenantStatusResponse",
+        "type": "object"
+      },
+      "TenantType": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "descr": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          }
+        },
+        "title": "TenantType",
+        "type": "object"
+      },
+      "TenantTypeRequest": {
+        "title": "TenantTypeRequest",
+        "type": "object"
+      },
+      "TenantTypeResponse": {
+        "properties": {
+          "typeList": {
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "descr": {
+                "type": "string"
+              },
+              "status": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "title": "TenantTypeResponse",
+        "type": "object"
+      },
+      "UpdateTenantRequest": {
+        "properties": {
+          "say": {
+            "type": "string"
+          }
+        },
+        "title": "UpdateTenantRequest",
+        "type": "object"
+      },
+      "UpdateTenantResponse": {
+        "properties": {
+          "say": {
+            "type": "string"
+          }
+        },
+        "title": "UpdateTenantResponse",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "MicroAPIToken": {
+        "bearerFormat": "JWT",
+        "description": "Micro API token",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Generated by protoc-gen-openapi",
+    "title": "Tenant",
+    "version": "1",
+    "x-logo": {
+      "altText": "Micro logo",
+      "backgroundColor": "#FFFFFF",
+      "url": "https://micro.dev/images/brand.png"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/tenant/Tenant/CreateTenant": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TenantCreateTenantRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TenantCreateTenantResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Tenant.CreateTenant(CreateTenantRequest)"
+      }
+    },
+    "/tenant/Tenant/DeleteTenant": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TenantDeleteTenantRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TenantDeleteTenantResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Tenant.DeleteTenant(DeleteTenantRequest)"
+      }
+    },
+    "/tenant/Tenant/v1/GetTenantStatus": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TenantGetTenantStatusRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TenantGetTenantStatusResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Tenant.GetTenantStatus(TenantStatusRequest)"
+      }
+    },
+    "/tenant/Tenant/GetTenantType": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TenantGetTenantTypeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TenantGetTenantTypeResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Tenant.GetTenantType(TenantTypeRequest)"
+      }
+    },
+    "/tenant/Tenant/ListTenants": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TenantListTenantsRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TenantListTenantsResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Tenant.ListTenants(ListTenantsRequest)"
+      }
+    },
+    "/tenant/Tenant/UpdateTenant": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/TenantUpdateTenantRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/TenantUpdateTenantResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Tenant.UpdateTenant(UpdateTenantRequest)"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Micro dev environment"
+    }
+  ]
+}

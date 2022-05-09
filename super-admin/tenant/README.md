@@ -1,11 +1,11 @@
-# User_management Service
+# Tenant Service
 
-This is the User_management service
+This is the Tenant service
 
 Generated with
 
 ```
-micro new user_management
+micro new tenant
 ```
 
 ## Usage

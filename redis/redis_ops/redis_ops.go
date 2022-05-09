@@ -86,7 +86,7 @@ func Get(key string) (string, error) {
 
 	if err == redis.ErrNil {
 		log.Printf("%s : Alert! this Key does not exist\n", key)
-		return ("Alert! this Key does not exist\n"), err
+		return "", err
 	} else if err != nil {
 		log.Printf("ERROR: fail get key %s, error %s", key, err.Error())
 		return ("An Unknown error encountered"), err

@@ -44,6 +44,7 @@ func NewManagetokenEndpoints() []*api.Endpoint {
 
 type ManagetokenService interface {
 	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...client.CallOption) (*CreateTokenResponse, error)
+	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...client.CallOption) (*ValidateTokenResponse, error)
 }
 
 type managetokenService struct {
@@ -68,15 +69,27 @@ func (c *managetokenService) CreateToken(ctx context.Context, in *CreateTokenReq
 	return out, nil
 }
 
+func (c *managetokenService) ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...client.CallOption) (*ValidateTokenResponse, error) {
+	req := c.c.NewRequest(c.name, "Managetoken.ValidateToken", in)
+	out := new(ValidateTokenResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Managetoken service
 
 type ManagetokenHandler interface {
 	CreateToken(context.Context, *CreateTokenRequest, *CreateTokenResponse) error
+	ValidateToken(context.Context, *ValidateTokenRequest, *ValidateTokenResponse) error
 }
 
 func RegisterManagetokenHandler(s server.Server, hdlr ManagetokenHandler, opts ...server.HandlerOption) error {
 	type managetoken interface {
 		CreateToken(ctx context.Context, in *CreateTokenRequest, out *CreateTokenResponse) error
+		ValidateToken(ctx context.Context, in *ValidateTokenRequest, out *ValidateTokenResponse) error
 	}
 	type Managetoken struct {
 		managetoken
@@ -91,4 +104,8 @@ type managetokenHandler struct {
 
 func (h *managetokenHandler) CreateToken(ctx context.Context, in *CreateTokenRequest, out *CreateTokenResponse) error {
 	return h.ManagetokenHandler.CreateToken(ctx, in, out)
+}
+
+func (h *managetokenHandler) ValidateToken(ctx context.Context, in *ValidateTokenRequest, out *ValidateTokenResponse) error {
+	return h.ManagetokenHandler.ValidateToken(ctx, in, out)
 }

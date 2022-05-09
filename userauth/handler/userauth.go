@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
 	errors "github.com/micro/micro/v3/service/errors"
 	log "github.com/micro/micro/v3/service/logger"
@@ -48,12 +49,14 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 	var er interface{}
 	//**********************************
 	var values []string
-	var headtoken, username string
+	var headtoken, username, ip string
 
 	md, ok := metadata.FromIncomingContext(ctx)
 	if ok {
 		values = md.Get("authorization")
 		log.Info("Header => ", md)
+		ipPort := md.Get(":authority")[0]
+		ip = strings.Split(ipPort, ":")[0]
 	}
 
 	if len(values) > 0 {
@@ -80,14 +83,33 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 
 	if auth {
 
-		m := map[string]interface{}{
-			"foo": "bar",
-			"baz": 123,
+		var row struct {
+			Profile_id int      `json:"profile_id"`
+			Status_id  int      `json:"status_id"`
+			Tenant_id  int      `json:"tenant_id"`
+			First_name string   `json:"first_name"`
+			Last_name  string   `json:"last_name"`
+			Email      string   `json:"email"`
+			Phone      string   `json:"phone"`
+			Services   []string `json:"services"`
 		}
-		b, err := json.Marshal(m)
+
+		var err = database.DB.QueryRow("select profile_id, status_id, tenant_id, first_name, last_name, email, phone from user_profile where user_id = $1",
+			userId).Scan(&row.Profile_id, &row.Status_id, &row.Tenant_id, &row.First_name, &row.Last_name, &row.Email, &row.Phone)
+
+		// m := map[string]interface{}{
+		// 	"foo": "bar",
+		// 	"baz": 123,
+		// }
+		b, err := json.Marshal(row)
+		if err != nil {
+			log.Info("JSON Marshal Error: " + err.Error())
+		}
 		claims := &structpb.Struct{}
 		err = protojson.Unmarshal(b, claims)
-
+		if err != nil {
+			log.Info("protojson Unmarshal Error: " + err.Error())
+		}
 		token, err := TokenService().CreateToken(context.Background(), &token.CreateTokenRequest{
 			UserId:       int64(userId),
 			Username:     username,
@@ -111,6 +133,17 @@ func (e *Userauth) UserLogin(ctx context.Context, req *userauth.LoginRequest, rs
 			return err
 		}
 		log.Info(setCacheAT)
+
+		setCacheATiP, err := RedisService().Set(context.Background(), &redis.SetRequest{
+			Key:   token.AccessUuid + "-IP",
+			Value: ip,
+			Life:  token.AtExpires,
+		})
+		if err != nil {
+			log.Info("Access Token IP ERROR: " + err.Error())
+			return err
+		}
+		log.Info(setCacheATiP)
 
 		setCacheRT, err := RedisService().Set(context.Background(), &redis.SetRequest{
 			Key:   token.RefreshUuid,
